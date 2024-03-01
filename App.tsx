@@ -53,7 +53,7 @@ export default function App() {
           tabBarIcon: ({ color }) => (
       <MaterialIcons name="category" size={24} color="blue" />
           ),
-            headerShown: false
+            headerShown: true
           }} />
       </Tab.Navigator>
     </NavigationContainer>
