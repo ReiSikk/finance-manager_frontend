@@ -1,6 +1,7 @@
 import React from 'react'
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { View, Text, TextInput, SafeAreaView, StyleSheet, FlatList } from 'react-native'
+import { getFocusedRouteNameFromRoute, RouteProp, useRoute } from '@react-navigation/native';
+import { View, Text, TextInput, SafeAreaView, StyleSheet, Button, FlatList, ScrollView } from 'react-native'
+import DropDownPicker from 'react-native-dropdown-picker';
 import { RootStackParamList } from '../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -14,32 +15,93 @@ const EntryEditScreen = ({route, navigation}: Props) => {
 
   const [text, onChangeText] = React.useState('');
   const [number, onChangeNumber] = React.useState('');
-    console.log(route.params.entryId);
+  const [selectedValue, setSelectedValue] = React.useState<string | null>(null);
+  const [items, setItems] = React.useState([
+    { label: 'Java', value: 'java' },
+    { label: 'JavaScript', value: 'js' },
+  ]);
+   // console.log(route.params.entryId);
 
 
   return (
-    <SafeAreaView>
+    <ScrollView>
+      <View style={styles.container}>
+      <Text style={styles.heading}>New expense</Text>
+       <Text style={styles.label}>Name</Text>
     <TextInput
       style={styles.input}
-      onChangeText={onChangeText}
+      placeholder="Name"
       value={text}
     />
+     <Text style={styles.label}>Amount</Text>
     <TextInput
-      style={styles.input}
-      onChangeText={onChangeNumber}
+      style={[styles.input, styles.amount]}
       value={number}
-      placeholder="useless placeholder"
+      placeholder="Amount"
       keyboardType="numeric"
     />
-  </SafeAreaView>
+     <Text style={styles.label}>Currency</Text>
+        <TextInput
+      style={styles.input}
+      value={text}
+      placeholder="Currency"
+    />
+     <Text style={styles.label}>Category</Text>
+        <TextInput
+      style={styles.input}
+      value={text}
+      placeholder="Category"
+    />
+        {/* <DropDownPicker
+        items={items}
+        onChangeItem={(item) => setSelectedValue(item.value)}
+      /> */}
+     <Text style={styles.label}>Date</Text>
+           <TextInput
+      style={styles.input}
+      value={text}
+      placeholder="Date"
+    />
+     <Text style={styles.label}>Comment</Text>
+           <TextInput
+      style={styles.input}
+      value={text}
+      placeholder="Comment"
+    />
+       <Button title="Add Expense" />
+    </View>
+
+  </ScrollView>
   )
 }
 const styles = StyleSheet.create({
+  container: {
+    margin: 12,
+  },
   input: {
     height: 40,
-    margin: 12,
+    marginBottom: 18,
+    marginTop: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  amount: {
+    width: 80,
+  },
+  label: {
+    fontSize: 20,
+  },
+  heading: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  dropdown: {
+    height: 50,
+    width: 200,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
 });
 
