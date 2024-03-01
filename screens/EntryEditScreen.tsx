@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { getFocusedRouteNameFromRoute, RouteProp, useRoute } from '@react-navigation/native';
 import { View, Text, TextInput, SafeAreaView, StyleSheet, Button, FlatList, ScrollView } from 'react-native'
-import DropDownPicker from 'react-native-dropdown-picker';
 import { RootStackParamList } from '../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -13,14 +12,18 @@ type Props = NativeStackScreenProps<RootStackParamList, "EntryEdit">
 const EntryEditScreen = ({route, navigation}: Props) => {
 
 
-  const [text, onChangeText] = React.useState('');
-  const [number, onChangeNumber] = React.useState('');
-  const [selectedValue, setSelectedValue] = React.useState<string | null>(null);
-  const [items, setItems] = React.useState([
-    { label: 'Java', value: 'java' },
-    { label: 'JavaScript', value: 'js' },
-  ]);
+  const [entryData, setEntryData] = useState({
+    amount: "",
+    date: "",
+    currency: "",
+    category: "",
+    name: "",
+    comment: "",
+  });
+  const [number, onChangeNumber] = useState('');
+
    // console.log(route.params.entryId);
+   console.log(entryData, "entryData");
 
 
   return (
@@ -31,41 +34,43 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     <TextInput
       style={styles.input}
       placeholder="Name"
-      value={text}
+      onChangeText={text => setEntryData({...entryData, name: text})}
+      value={entryData.name}
     />
      <Text style={styles.label}>Amount</Text>
     <TextInput
       style={[styles.input, styles.amount]}
-      value={number}
+      value={entryData.amount}
+      onChangeText={text => setEntryData({...entryData, amount: text})}
       placeholder="Amount"
       keyboardType="numeric"
     />
-     <Text style={styles.label}>Currency</Text>
-        <TextInput
-      style={styles.input}
-      value={text}
-      placeholder="Currency"
-    />
+      <TextInput
+        style={styles.input}
+      onChangeText={text => setEntryData({...entryData, currency: text})}
+        value={entryData.currency}
+        placeholder="Currency"
+      />
      <Text style={styles.label}>Category</Text>
         <TextInput
       style={styles.input}
-      value={text}
+      onChangeText={text => setEntryData({...entryData, category: text})}
+      value={entryData.category}
       placeholder="Category"
     />
-        {/* <DropDownPicker
-        items={items}
-        onChangeItem={(item) => setSelectedValue(item.value)}
-      /> */}
+
      <Text style={styles.label}>Date</Text>
            <TextInput
       style={styles.input}
-      value={text}
+      onChangeText={text => setEntryData({...entryData, date: text})}
+      value={entryData.date}
       placeholder="Date"
     />
      <Text style={styles.label}>Comment</Text>
            <TextInput
       style={styles.input}
-      value={text}
+      onChangeText={text => setEntryData({...entryData, comment: text})}
+      value={entryData.comment}
       placeholder="Comment"
     />
        <Button title="Add Expense" />
