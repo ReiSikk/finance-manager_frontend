@@ -8,7 +8,7 @@ export class CreateEntryDTO {
     comment: string;
     category: Category;
 
-    constructor(name:string, amount: number, date: Date, currency: string, comment: string, category: Category) {
+    constructor(amount: number, date: Date, currency: string, name: string, comment: string, category: Category) {
         this.amount = amount;
         this.date = date;
         this.currency = currency;
