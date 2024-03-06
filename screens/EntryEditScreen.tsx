@@ -1,26 +1,50 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getFocusedRouteNameFromRoute, RouteProp, useRoute } from '@react-navigation/native';
-import { View, Text, TextInput, SafeAreaView, StyleSheet, Button, FlatList, ScrollView } from 'react-native'
+import { View, Text, TextInput, SafeAreaView, StyleSheet, Button, FlatList, ScrollView, Modal, Pressable } from 'react-native'
 import { RootStackParamList } from '../App';
+import { fetchEntries } from '../store/EntrySlice';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
+import { CreateEntryDTO } from '../entities/CreateEntryDTO';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/store';
+import { Category } from '../entities/category';
+import DateTimePicker from 'react-native-ui-datepicker';
+import dayjs from 'dayjs';
 
 type Props = NativeStackScreenProps<RootStackParamList, "EntryEdit">
 
 
 
 const EntryEditScreen = ({route, navigation}: Props) => {
-
-
+  const dispatch: AppDispatch = useDispatch();
+  const entries = useSelector((state: RootState) => state.entry.entries);
+  const [modalVisible, setModalVisible] = useState(false);
+  
   const [entryData, setEntryData] = useState({
     amount: 0,
-    date: "",
+    date: new Date(),
     currency: "",
-    category: "",
     name: "",
     comment: "",
+    category: new Category("string"),
   });
+
   const [error, setError] = useState('');
+  const [date, setDate] = useState<any>(dayjs());
+  const formatDate = (date: dayjs.Dayjs) => {
+    return dayjs(date).format('DD/MM/YYYY');
+  };
+
+ 
+  const handleSubmit = () => {
+    const newEntry = new CreateEntryDTO(entryData.amount, entryData.date, entryData.currency, entryData.name, entryData.comment, entryData.category);
+    // Dispatch an action or make an API call with newEntry here
+  };
+  useEffect(() => {
+    dispatch(fetchEntries());
+  }, [dispatch]);
+
+
 
    // console.log(route.params.entryId);
    console.log(entryData, "entryData");
@@ -65,18 +89,37 @@ const EntryEditScreen = ({route, navigation}: Props) => {
      <Text style={styles.label}>Category</Text>
         <TextInput
       style={styles.input}
-      onChangeText={text => setEntryData({...entryData, category: text})}
-      value={entryData.category}
+      onChangeText={text => setEntryData({...entryData, category: new Category(text)})}
+      value={entryData.category.name}
       placeholder="Category"
     />
-
-     <Text style={styles.label}>Date</Text>
-           <TextInput
-      style={styles.input}
-      onChangeText={text => setEntryData({...entryData, date: text})}
-      value={entryData.date}
-      placeholder="Date"
-    />
+     <Pressable
+     style={styles.input}
+        onPress={() => setModalVisible(true)}>
+              <Text>{date ? formatDate(date) : 'Select date'}</Text>
+      </Pressable>
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+          <View style={styles.centered}>
+            <View style={styles.modal}>
+     <DateTimePicker
+        mode="single"
+        date={date}
+        onChange={(params) => setDate(params.date)}
+      />
+            <Pressable
+            style={styles.hideBtn}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.btnText}>Select</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
      <Text style={styles.label}>Comment</Text>
            <TextInput
       style={styles.input}
@@ -120,9 +163,36 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
   },
+
   error: {
     color: '#ff0000',
-  }
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modal: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    zIndex: 999,
+    width: "66%",
+    height: 400,
+  },
+  hideBtn: {
+    color: "white",
+    textAlign: "center",
+    padding: 10,
+    backgroundColor: "blue",
+    width: "66%",
+    borderRadius: 999,
+    alignSelf: "center",
+  },
+  btnText: {
+    color: "white",
+    textAlign: "center",
+  },
 });
 
 
