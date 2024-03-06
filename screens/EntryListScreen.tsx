@@ -3,8 +3,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View, Text, Button, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
 import { RootStackParamList } from '../App';
 import { AntDesign } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/store';
+import { fetchEntries } from '../store/EntrySlice';
+import { useEffect } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Category } from '../entities/category';
 
 
 
@@ -54,15 +59,27 @@ const DATA = [
   },
 ];
 
-type ItemProps = {title: string};
-const Item = ({title}: ItemProps) => (
+type ItemProps = {name: string, amount: number, currency: string, comment: string, description: string, category: Category};
+const Item = ({name, amount, currency, comment, description, category}: ItemProps) => (
   <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
+    <Text style={styles.title}>{name}</Text>
+    <Text>{amount}</Text>
+    <Text>{currency}</Text>
+    <Text>{comment}</Text>
+    <Text>{description}</Text>
+   {/*  <Text>{category.name}</Text> */}
   </View>
 );
 
 
 const EntryListScreen = (props: Props) => {
+  const dispatch: AppDispatch = useDispatch();
+  const entries = useSelector((state: RootState) => state.entry.entries);
+
+  useEffect(() => {
+    dispatch(fetchEntries());
+  }, [dispatch]);
+
   return (
     <>
     <View style={styles.layoutFlex}>
@@ -74,9 +91,9 @@ const EntryListScreen = (props: Props) => {
     </TouchableOpacity>
     <View>
         <FlatList
-        data={DATA}
-        renderItem={({item}) => <Item title={item.title} />}
-        keyExtractor={item => item.id}
+        data={entries}
+        renderItem={({item}) => <Item name={item.name} amount={item.amount} currency={item.currency} comment={item.comment} description={item.description} category={item.category} />}
+        keyExtractor={item => item.id.toString()}
       />
     </View>
     </View>

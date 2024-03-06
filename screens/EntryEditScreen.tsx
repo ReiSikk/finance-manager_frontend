@@ -26,7 +26,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     currency: "",
     name: "",
     comment: "",
-    category: new Category("string"),
+    category: new Category(""),
   });
 
   const [error, setError] = useState('');
