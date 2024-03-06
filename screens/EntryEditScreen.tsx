@@ -13,17 +13,28 @@ const EntryEditScreen = ({route, navigation}: Props) => {
 
 
   const [entryData, setEntryData] = useState({
-    amount: "",
+    amount: 0,
     date: "",
     currency: "",
     category: "",
     name: "",
     comment: "",
   });
-  const [number, onChangeNumber] = useState('');
+  const [error, setError] = useState('');
 
    // console.log(route.params.entryId);
    console.log(entryData, "entryData");
+
+   const handleValidation = () => {
+    if (entryData.name.trim() === '') {
+      setError('Field cannot be empty');
+    } if (entryData.amount < 0) {
+      setError('The amount needs to be bigger than 0');
+    } else {
+      setError('');
+      //code for submitting the post request
+    }
+  };
 
 
   return (
@@ -40,8 +51,8 @@ const EntryEditScreen = ({route, navigation}: Props) => {
      <Text style={styles.label}>Amount</Text>
     <TextInput
       style={[styles.input, styles.amount]}
-      value={entryData.amount}
-      onChangeText={text => setEntryData({...entryData, amount: text})}
+      value={entryData.amount.toString()}
+      onChangeText={text => setEntryData({...entryData, amount: parseFloat(text)})}
       placeholder="Amount"
       keyboardType="numeric"
     />
@@ -73,6 +84,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       value={entryData.comment}
       placeholder="Comment"
     />
+  {error ? <Text style={styles.error}>{error}</Text> : null}
        <Button title="Add Expense" />
     </View>
 
@@ -108,6 +120,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
   },
+  error: {
+    color: '#ff0000',
+  }
 });
 
 
