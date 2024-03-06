@@ -9,6 +9,8 @@ import CategoryScreen from './screens/CategoryScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { store } from './store/store'
+import { Provider } from 'react-redux'
 
 
 //map the route names to the params of the route meaning define a type for the params of each route
@@ -35,6 +37,7 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen 
@@ -57,6 +60,7 @@ export default function App() {
           }} />
       </Tab.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 
