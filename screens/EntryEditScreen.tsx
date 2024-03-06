@@ -28,6 +28,8 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     comment: "",
     category: new Category("string"),
   });
+
+  const [error, setError] = useState('');
   const [date, setDate] = useState<any>(dayjs());
   const formatDate = (date: dayjs.Dayjs) => {
     return dayjs(date).format('DD/MM/YYYY');
@@ -46,6 +48,17 @@ const EntryEditScreen = ({route, navigation}: Props) => {
 
    // console.log(route.params.entryId);
    console.log(entryData, "entryData");
+
+   const handleValidation = () => {
+    if (entryData.name.trim() === '') {
+      setError('Field cannot be empty');
+    } if (entryData.amount < 0) {
+      setError('The amount needs to be bigger than 0');
+    } else {
+      setError('');
+      //code for submitting the post request
+    }
+  };
 
 
   return (
@@ -114,6 +127,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       value={entryData.comment}
       placeholder="Comment"
     />
+  {error ? <Text style={styles.error}>{error}</Text> : null}
        <Button title="Add Expense" />
     </View>
 
@@ -148,6 +162,10 @@ const styles = StyleSheet.create({
     width: 200,
     borderWidth: 1,
     borderColor: '#ccc',
+  },
+
+  error: {
+    color: '#ff0000',
   },
   centered: {
     flex: 1,
