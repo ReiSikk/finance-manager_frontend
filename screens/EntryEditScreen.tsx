@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { getFocusedRouteNameFromRoute, RouteProp, useRoute } from '@react-navigation/native';
 import { View, Text, TextInput, SafeAreaView, StyleSheet, Button, FlatList, ScrollView, Modal, Pressable } from 'react-native'
 import { RootStackParamList } from '../App';
-import { fetchEntries } from '../store/EntrySlice';
+import { createEntry, fetchEntries } from '../store/EntrySlice';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CreateEntryDTO } from '../entities/CreateEntryDTO';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,6 +28,8 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     comment: "",
     category: new Category(""),
   });
+
+  const newEntry = new CreateEntryDTO(entryData.amount, entryData.date, entryData.currency, entryData.name, entryData.comment, entryData.category);
 
   const [error, setError] = useState('');
   const [date, setDate] = useState<any>(dayjs());
@@ -128,7 +130,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       placeholder="Comment"
     />
   {error ? <Text style={styles.error}>{error}</Text> : null}
-       <Button title="Add Expense" />
+       <Button title="Add Expense" onPress={() => dispatch(createEntry(newEntry)) } />
     </View>
 
   </ScrollView>
