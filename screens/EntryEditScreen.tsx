@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { getFocusedRouteNameFromRoute, RouteProp, useRoute } from '@react-navigation/native';
 import { View, Text, TextInput, SafeAreaView, StyleSheet, Button, FlatList, ScrollView, Modal, Pressable } from 'react-native'
 import { RootStackParamList } from '../App';
-import { fetchEntries } from '../store/EntrySlice';
+import { createEntry, fetchEntries } from '../store/EntrySlice';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CreateEntryDTO } from '../entities/CreateEntryDTO';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,8 +30,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
   });
 
   const [errors, setErrors] = useState({ amount: '', name: '', currency: '' });
-
-
+  const newEntry = new CreateEntryDTO(entryData.amount, entryData.date, entryData.currency, entryData.name, entryData.comment, entryData.category);
   const [date, setDate] = useState<any>(dayjs());
   const formatDate = (date: dayjs.Dayjs) => {
     return dayjs(date).format('DD/MM/YYYY');
@@ -42,9 +41,9 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     const newEntry = new CreateEntryDTO(entryData.amount, entryData.date, entryData.currency, entryData.name, entryData.comment, entryData.category);
     // Dispatch an action or make an API call with newEntry here
   };
- // useEffect(() => {
-  //  dispatch(fetchEntries());
-  //}, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchEntries());
+  }, [dispatch]);
 
   const handleValidation = () => {
     const { amount, name, currency } = entryData;
@@ -142,7 +141,8 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       placeholder="Comment"
     />
  
-       <Button title="Add Expense" onPress={handleValidation} />
+       <Button title="Add Expense" onPress={() => dispatch(createEntry(newEntry)) } />
+
     </View>
 
   </ScrollView>
