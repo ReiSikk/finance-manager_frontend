@@ -29,9 +29,8 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     category: new Category(""),
   });
 
+  const [errors, setErrors] = useState({ amount: '', name: '', currency: '' });
   const newEntry = new CreateEntryDTO(entryData.amount, entryData.date, entryData.currency, entryData.name, entryData.comment, entryData.category);
-
-  const [error, setError] = useState('');
   const [date, setDate] = useState<any>(dayjs());
   const formatDate = (date: dayjs.Dayjs) => {
     return dayjs(date).format('DD/MM/YYYY');
@@ -46,21 +45,29 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     dispatch(fetchEntries());
   }, [dispatch]);
 
+  const handleValidation = () => {
+    const { amount, name, currency } = entryData;
+    const newErrors = { amount: '', name: '', currency: '' };
 
+    if (amount <= 0) {
+      newErrors.amount = 'Amount needs to be bigger then 0';
+    }
+
+    if (name.trim() === '') {
+      newErrors.name = 'Name cannot be empty';
+    }
+
+    if (currency.trim() === '') {
+      newErrors.currency = 'Currency cannot be empty'
+    }
+
+    setErrors(newErrors);
+  };
 
    // console.log(route.params.entryId);
    console.log(entryData, "entryData");
 
-   const handleValidation = () => {
-    if (entryData.name.trim() === '') {
-      setError('Field cannot be empty');
-    } if (entryData.amount < 0) {
-      setError('The amount needs to be bigger than 0');
-    } else {
-      setError('');
-      //code for submitting the post request
-    }
-  };
+  
 
 
   return (
@@ -74,6 +81,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       onChangeText={text => setEntryData({...entryData, name: text})}
       value={entryData.name}
     />
+{errors.name ? <Text style={styles.error}>{errors.name}</Text> : null}
      <Text style={styles.label}>Amount</Text>
     <TextInput
       style={[styles.input, styles.amount]}
@@ -82,12 +90,15 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       placeholder="Amount"
       keyboardType="numeric"
     />
+    {errors.amount ? <Text style={styles.error}>{errors.amount}</Text> : null}
+    <Text style={styles.label}>Currency</Text>
       <TextInput
         style={styles.input}
       onChangeText={text => setEntryData({...entryData, currency: text})}
         value={entryData.currency}
         placeholder="Currency"
       />
+      {errors.currency ? <Text style={styles.error}>{errors.currency}</Text> : null}
      <Text style={styles.label}>Category</Text>
         <TextInput
       style={styles.input}
@@ -129,8 +140,9 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       value={entryData.comment}
       placeholder="Comment"
     />
-  {error ? <Text style={styles.error}>{error}</Text> : null}
+ 
        <Button title="Add Expense" onPress={() => dispatch(createEntry(newEntry)) } />
+
     </View>
 
   </ScrollView>
@@ -165,7 +177,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
   },
-
   error: {
     color: '#ff0000',
   },
