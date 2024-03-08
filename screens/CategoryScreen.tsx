@@ -19,9 +19,6 @@ const CategoryScreen = () => {
   }, [dispatch]);
 
 
-
-
-
 /*   const handleDeleteCategory = (categoryId) => {
     dispatch(deleteCategory(categoryId));
   }; */
@@ -44,11 +41,11 @@ const CategoryScreen = () => {
   ];
 
 
-  type CategoryProps = {title: string};
-const Category = ({title}: CategoryProps) => (
+  type CategoryProps = {name: string};
+const Category = ({name}: CategoryProps) => (
   <View style={styles.category_item}>
     <Text>
-      {title}
+      {name}
       </Text>
   </View>
 )
@@ -57,9 +54,8 @@ const Category = ({title}: CategoryProps) => (
   return (
     <View style={styles.container}>
       <FlatList
-        data={DATA}
-        renderItem={({item}) => <Category title={item.title} />}
-        keyExtractor={item => item.id}
+        data={categories}
+        renderItem={({item}) => <Category name={item.name} />}
       />
   <TextInput
         style={styles.input}
