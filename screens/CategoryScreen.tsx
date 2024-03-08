@@ -44,7 +44,7 @@ const CategoryScreen = () => {
   type CategoryProps = {name: string};
 const Category = ({name}: CategoryProps) => (
   <View style={styles.category_item}>
-    <Text>
+    <Text style={styles.category_name}>
       {name}
       </Text>
   </View>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   category_item: {
     padding: 10,
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#474350',
     borderRadius: 8,
     width: '90%',
     alignSelf: 'center',
@@ -92,11 +92,16 @@ const styles = StyleSheet.create({
     height: 75,
     marginTop: 24,
   },
+  category_name: {
+    fontSize: 18,
+    color: 'white',
+  },
   input: {
     height: 40,
-    borderColor: 'gray',
+    margin: 12,
     borderWidth: 1,
-    // Add other styles as needed
+    borderRadius: 8,
+    padding: 10,
   },
 });
 
