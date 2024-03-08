@@ -20,6 +20,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
   const dispatch: AppDispatch = useDispatch();
   const entries = useSelector((state: RootState) => state.entry.entries);
   const [modalVisible, setModalVisible] = useState(false);
+  const [entryAdded, setEntryAdded] = useState(false);
   
   const [entryData, setEntryData] = useState({
     amount: 0,
@@ -40,37 +41,38 @@ const EntryEditScreen = ({route, navigation}: Props) => {
  
   const handleSubmit = () => {
     dispatch(createEntry(newEntry))
-      .then(() => {
-        // Dispatch fetchCategories() after a new entry is created
-        dispatch(fetchCategories());
-      })
-      .catch(error => {
-        console.error('Error adding entry:', error);
-      });
+    .then(() => {
+      // Entry added successfully
+      setEntryAdded(true);
+    });
+    .catch(error => {
+      // Handle error if entry addition fails
+      console.error('Error adding expense:', error);
+    });
+
   };
 
-  useEffect(() => {
-    dispatch(fetchEntries());
-  }, [dispatch]);
-
-  const handleValidation = () => {
+  const handleValidation = (fieldName: string) => {
     const { amount, name, currency } = entryData;
     const newErrors = { amount: '', name: '', currency: '' };
-
-    if (amount <= 0) {
-      newErrors.amount = 'Amount needs to be bigger then 0';
+  
+    if (fieldName === 'amount') {
+      if (amount <= 0) {
+        newErrors.amount = 'Amount needs to be bigger than 0';
+      }
+    } else if (fieldName === 'name') {
+      if (name.trim() === '') {
+        newErrors.name = 'Name cannot be empty';
+      }
+    } else if (fieldName === 'currency') {
+      if (currency.trim() === '') {
+        newErrors.currency = 'Currency cannot be empty';
+      }
     }
-
-    if (name.trim() === '') {
-      newErrors.name = 'Name cannot be empty';
-    }
-
-    if (currency.trim() === '') {
-      newErrors.currency = 'Currency cannot be empty'
-    }
-
+  
     setErrors(newErrors);
   };
+  
 
    // console.log(route.params.entryId);
    console.log(entryData, "entryData");
@@ -88,6 +90,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       placeholder="Name"
       onChangeText={text => setEntryData({...entryData, name: text})}
       value={entryData.name}
+      onBlur={() => handleValidation('name')}
     />
 {errors.name ? <Text style={styles.error}>{errors.name}</Text> : null}
      <Text style={styles.label}>Amount</Text>
@@ -97,6 +100,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       onChangeText={text => setEntryData({...entryData, amount: parseFloat(text) || 0})}
       placeholder="Amount"
       keyboardType="numeric"
+      onBlur={() => handleValidation('amount')}
     />
     {errors.amount ? <Text style={styles.error}>{errors.amount}</Text> : null}
     <Text style={styles.label}>Currency</Text>
@@ -105,6 +109,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       onChangeText={text => setEntryData({...entryData, currency: text})}
         value={entryData.currency}
         placeholder="Currency"
+        onBlur={() => handleValidation('currency')}
       />
       {errors.currency ? <Text style={styles.error}>{errors.currency}</Text> : null}
      <Text style={styles.label}>Category</Text>
@@ -149,9 +154,10 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       value={entryData.comment}
       placeholder="Comment"
     />
- 
-       <Button title="Add Expense" onPress={() => dispatch(createEntry(newEntry)) } />
-
+<View style={styles.buttonContainer}>
+      { /*<Button color='#FFFFFF' title="Add Expense" onPress={() => dispatch(createEntry(newEntry))} /> */}
+           { <Button color='#FFFFFF' title={entryAdded ? "Expense Added ✓" : "Add Expense"} onPress={handleSubmit} disabled={entryAdded} /> }
+           </View>
     </View>
 
   </ScrollView>
@@ -189,6 +195,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: '#ff0000',
+    marginBottom: 10,
   },
   centered: {
     flex: 1,
@@ -219,6 +226,12 @@ const styles = StyleSheet.create({
   btnText: {
     color: "white",
     textAlign: "center",
+  },
+  buttonContainer: {
+    backgroundColor: 'blue',
+    color: '#FFFFFF',
+    borderRadius: 5,
+    padding: 10,
   },
 });
 
