@@ -19,10 +19,10 @@ type ItemProps = {name: string, amount: number, currency: string, comment: strin
 const Item = ({name, amount, currency, comment, description, /* category */}: ItemProps) => (
   <View style={styles.item}>
     <Text style={styles.title}>{name}</Text>
-    <Text>{amount}</Text>
-    <Text>{currency}</Text>
-    <Text>{comment}</Text>
-    <Text>{description}</Text>
+    <Text style={styles.white}>{amount}</Text>
+    <Text style={styles.white}>{currency}</Text>
+    <Text style={styles.white}>{comment}</Text>
+    <Text style={styles.white}>{description}</Text>
    {/*  {category !== null ? <Text>{category.name}</Text> : <Text>Category not set</Text>} */}
   </View>
 );
@@ -104,12 +104,18 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#474350',
+    borderRadius: 8,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    color: 'white',
   },
   title: {
     fontSize: 32,
+    color: 'white',
   },
+  white: {
+    color: 'white',
+  }
 });

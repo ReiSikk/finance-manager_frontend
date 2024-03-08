@@ -4,51 +4,22 @@ import { FlatList, Text, View, StyleSheet, Button, TextInput } from 'react-nativ
 import { useSelector, useDispatch } from 'react-redux';
 import { createCategory, fetchCategories } from '../store/CategorySlice';
 import { AppDispatch, RootState } from '../store/store';
-import { CreateCategoryDTO } from '../entities/CreateCategoryDTO';
 
 const CategoryScreen = () => {
 
-  const [inputValue, setInputValue] = useState('');
-
   const dispatch: AppDispatch = useDispatch();
   const categories = useSelector((state: RootState) => state.category.categories);
-  const newCategory = new CreateCategoryDTO(inputValue);
 
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
 
-
-
-
-/*   const handleDeleteCategory = (categoryId) => {
-    dispatch(deleteCategory(categoryId));
-  }; */
-
-  const DATA = [
-    {
-      id: 'Takeout',
-      title: 'First Item',
-    },
-    {
-      id: 'Groceries',
-      title: 'Second Item',
-    },
-    {
-      id: 'Transportation',
-      title: 'Third Item',
-    },
-
-  
-  ];
-
-
-  type CategoryProps = {title: string};
-const Category = ({title}: CategoryProps) => (
+  type CategoryProps = {name: string};
+const Category = ({name}: CategoryProps) => (
   <View style={styles.category_item}>
-    <Text>
-      {title}
+    <Text style={styles.category_name}>
+      {name}
       </Text>
   </View>
 )
@@ -57,17 +28,9 @@ const Category = ({title}: CategoryProps) => (
   return (
     <View style={styles.container}>
       <FlatList
-        data={DATA}
-        renderItem={({item}) => <Category title={item.title} />}
-        keyExtractor={item => item.id}
+        data={categories}
+        renderItem={({item}) => <Category name={item.name} />}
       />
-  <TextInput
-        style={styles.input}
-        placeholder="Category"
-        value={inputValue}
-        onChangeText={text => setInputValue(text)}
-      />
-      <Button title="add category" onPress={() => dispatch(createCategory(newCategory)) }/>
     </View>
   )
 }
@@ -88,7 +51,7 @@ const styles = StyleSheet.create({
   },
   category_item: {
     padding: 10,
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#474350',
     borderRadius: 8,
     width: '90%',
     alignSelf: 'center',
@@ -96,11 +59,16 @@ const styles = StyleSheet.create({
     height: 75,
     marginTop: 24,
   },
+  category_name: {
+    fontSize: 18,
+    color: 'white',
+  },
   input: {
     height: 40,
-    borderColor: 'gray',
+    margin: 12,
     borderWidth: 1,
-    // Add other styles as needed
+    borderRadius: 8,
+    padding: 10,
   },
 });
 
