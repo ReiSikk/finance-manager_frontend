@@ -54,24 +54,27 @@ const EntryEditScreen = ({route, navigation}: Props) => {
   //  dispatch(fetchEntries());
   //}, [dispatch]);
 
-  const handleValidation = () => {
+  const handleValidation = (fieldName: string) => {
     const { amount, name, currency } = entryData;
     const newErrors = { amount: '', name: '', currency: '' };
-
-    if (amount <= 0) {
-      newErrors.amount = 'Amount needs to be bigger then 0';
+  
+    if (fieldName === 'amount') {
+      if (amount <= 0) {
+        newErrors.amount = 'Amount needs to be bigger than 0';
+      }
+    } else if (fieldName === 'name') {
+      if (name.trim() === '') {
+        newErrors.name = 'Name cannot be empty';
+      }
+    } else if (fieldName === 'currency') {
+      if (currency.trim() === '') {
+        newErrors.currency = 'Currency cannot be empty';
+      }
     }
-
-    if (name.trim() === '') {
-      newErrors.name = 'Name cannot be empty';
-    }
-
-    if (currency.trim() === '') {
-      newErrors.currency = 'Currency cannot be empty'
-    }
-
+  
     setErrors(newErrors);
   };
+  
 
    // console.log(route.params.entryId);
    console.log(entryData, "entryData");
@@ -89,6 +92,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       placeholder="Name"
       onChangeText={text => setEntryData({...entryData, name: text})}
       value={entryData.name}
+      onBlur={() => handleValidation('name')}
     />
 {errors.name ? <Text style={styles.error}>{errors.name}</Text> : null}
      <Text style={styles.label}>Amount</Text>
@@ -98,6 +102,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       onChangeText={text => setEntryData({...entryData, amount: parseFloat(text) || 0})}
       placeholder="Amount"
       keyboardType="numeric"
+      onBlur={() => handleValidation('amount')}
     />
     {errors.amount ? <Text style={styles.error}>{errors.amount}</Text> : null}
     <Text style={styles.label}>Currency</Text>
@@ -106,6 +111,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       onChangeText={text => setEntryData({...entryData, currency: text})}
         value={entryData.currency}
         placeholder="Currency"
+        onBlur={() => handleValidation('currency')}
       />
       {errors.currency ? <Text style={styles.error}>{errors.currency}</Text> : null}
     {/*  <Text style={styles.label}>Category</Text>
@@ -190,6 +196,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: '#ff0000',
+    marginBottom: 10,
   },
   centered: {
     flex: 1,
