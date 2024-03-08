@@ -19,6 +19,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
   const dispatch: AppDispatch = useDispatch();
   const entries = useSelector((state: RootState) => state.entry.entries);
   const [modalVisible, setModalVisible] = useState(false);
+  const [entryAdded, setEntryAdded] = useState(false);
   
   const [entryData, setEntryData] = useState({
     amount: 0,
@@ -38,12 +39,20 @@ const EntryEditScreen = ({route, navigation}: Props) => {
 
  
   const handleSubmit = () => {
-    const newEntry = new CreateEntryDTO(entryData.amount, entryData.date, entryData.currency, entryData.name, entryData.comment, entryData.category);
-    // Dispatch an action or make an API call with newEntry here
+    dispatch(createEntry(newEntry))
+    .then(() => {
+      // Entry added successfully
+      setEntryAdded(true);
+    })
+    .catch(error => {
+      // Handle error if entry addition fails
+      console.error('Error adding expense:', error);
+    });
+
   };
-  useEffect(() => {
-    dispatch(fetchEntries());
-  }, [dispatch]);
+ // useEffect(() => {
+  //  dispatch(fetchEntries());
+  //}, [dispatch]);
 
   const handleValidation = () => {
     const { amount, name, currency } = entryData;
@@ -141,9 +150,10 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       value={entryData.comment}
       placeholder="Comment"
     />
- 
-       <Button title="Add Expense" onPress={() => dispatch(createEntry(newEntry)) } />
-
+<View style={styles.buttonContainer}>
+      { /*<Button color='#FFFFFF' title="Add Expense" onPress={() => dispatch(createEntry(newEntry))} /> */}
+           { <Button color='#FFFFFF' title={entryAdded ? "Expense Added ✓" : "Add Expense"} onPress={handleSubmit} disabled={entryAdded} /> }
+           </View>
     </View>
 
   </ScrollView>
@@ -206,6 +216,12 @@ const styles = StyleSheet.create({
   btnText: {
     color: "white",
     textAlign: "center",
+  },
+  buttonContainer: {
+    backgroundColor: 'blue',
+    color: '#FFFFFF',
+    borderRadius: 5,
+    padding: 10,
   },
 });
 
