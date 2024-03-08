@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from '../store/store';
 import { Category } from '../entities/category';
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
+import { fetchCategories } from '../store/CategorySlice';
 
 type Props = NativeStackScreenProps<RootStackParamList, "EntryEdit">
 
@@ -43,16 +44,13 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     .then(() => {
       // Entry added successfully
       setEntryAdded(true);
-    })
+    });
     .catch(error => {
       // Handle error if entry addition fails
       console.error('Error adding expense:', error);
     });
 
   };
- // useEffect(() => {
-  //  dispatch(fetchEntries());
-  //}, [dispatch]);
 
   const handleValidation = (fieldName: string) => {
     const { amount, name, currency } = entryData;
@@ -114,13 +112,13 @@ const EntryEditScreen = ({route, navigation}: Props) => {
         onBlur={() => handleValidation('currency')}
       />
       {errors.currency ? <Text style={styles.error}>{errors.currency}</Text> : null}
-    {/*  <Text style={styles.label}>Category</Text>
+     <Text style={styles.label}>Category</Text>
         <TextInput
       style={styles.input}
       onChangeText={text => setEntryData({...entryData, category: new Category(text)})}
       value={entryData.category.name}
       placeholder="Category"
-    /> */}
+    />
     <Text style={styles.label}>Date</Text>
      <Pressable
      style={styles.input}
@@ -175,6 +173,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     borderWidth: 1,
     padding: 10,
+    borderRadius: 8,
   },
   amount: {
     width: 80,
@@ -208,17 +207,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     zIndex: 999,
-    width: "66%",
-    height: 400,
+    width: "75%",
+    height: "50%",
   },
   hideBtn: {
     color: "white",
     textAlign: "center",
-    padding: 10,
+    padding: 18,
     backgroundColor: "blue",
-    width: "66%",
+    width: "90%",
     borderRadius: 999,
     alignSelf: "center",
+    marginLeft: "auto",
+    marginBottom: 24,
+    position: "absolute",
+    bottom: 0,
   },
   btnText: {
     color: "white",
