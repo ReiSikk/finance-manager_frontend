@@ -86,7 +86,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     <TextInput
       style={[styles.input, styles.amount]}
       value={entryData.amount.toString()}
-      onChangeText={text => setEntryData({...entryData, amount: parseFloat(text)})}
+      onChangeText={text => setEntryData({...entryData, amount: parseFloat(text) || 0})}
       placeholder="Amount"
       keyboardType="numeric"
     />
@@ -106,6 +106,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       value={entryData.category.name}
       placeholder="Category"
     />
+    <Text style={styles.label}>Date</Text>
      <Pressable
      style={styles.input}
         onPress={() => setModalVisible(true)}>
