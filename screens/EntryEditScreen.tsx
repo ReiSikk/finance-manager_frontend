@@ -99,13 +99,13 @@ const EntryEditScreen = ({route, navigation}: Props) => {
         placeholder="Currency"
       />
       {errors.currency ? <Text style={styles.error}>{errors.currency}</Text> : null}
-     <Text style={styles.label}>Category</Text>
+    {/*  <Text style={styles.label}>Category</Text>
         <TextInput
       style={styles.input}
       onChangeText={text => setEntryData({...entryData, category: new Category(text)})}
       value={entryData.category.name}
       placeholder="Category"
-    />
+    /> */}
     <Text style={styles.label}>Date</Text>
      <Pressable
      style={styles.input}

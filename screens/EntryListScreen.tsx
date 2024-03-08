@@ -15,59 +15,15 @@ import { Category } from '../entities/category';
 
 type Props = NativeStackScreenProps<RootStackParamList, "EntryList">
 
-//TODO: GET the data from the backend
-const DATA = [
-  {
-    id: 'Expense1',
-    title: 'First Item',
-  },
-  {
-    id: 'Expense2',
-    title: 'Second Item',
-  },
-  {
-    id: 'Expense3',
-    title: 'Third Item',
-  },
-  {
-    id: 'Expense4',
-    title: 'First Item',
-  },
-  {
-    id: 'Expense5',
-    title: 'Second Item',
-  },
-  {
-    id: 'Expense6',
-    title: 'Third Item',
-  },
-  {
-    id: 'Expense7',
-    title: 'Second Item',
-  },
-  {
-    id: 'Expense8',
-    title: 'Third Item',
-  },
-  {
-    id: 'Expense9',
-    title: 'Second Item',
-  },
-  {
-    id: 'Expense10',
-    title: 'Third Item',
-  },
-];
-
-type ItemProps = {name: string, amount: number, currency: string, comment: string, description: string, category: Category};
-const Item = ({name, amount, currency, comment, description, category}: ItemProps) => (
+type ItemProps = {name: string, amount: number, currency: string, comment: string, description: string, /* category: Category */};
+const Item = ({name, amount, currency, comment, description, /* category */}: ItemProps) => (
   <View style={styles.item}>
     <Text style={styles.title}>{name}</Text>
     <Text>{amount}</Text>
     <Text>{currency}</Text>
     <Text>{comment}</Text>
     <Text>{description}</Text>
-   {/*  <Text>{category.name}</Text> */}
+   {/*  {category !== null ? <Text>{category.name}</Text> : <Text>Category not set</Text>} */}
   </View>
 );
 
@@ -92,7 +48,7 @@ const EntryListScreen = (props: Props) => {
     <View>
         <FlatList
         data={entries}
-        renderItem={({item}) => <Item name={item.name} amount={item.amount} currency={item.currency} comment={item.comment} description={item.description} category={item.category} />}
+        renderItem={({item}) => <Item name={item.name} amount={item.amount} currency={item.currency} comment={item.comment} description={item.description} /* category={item.category} */ />}
         keyExtractor={item => item.id.toString()}
       />
     </View>
