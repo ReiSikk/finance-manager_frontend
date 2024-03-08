@@ -30,31 +30,32 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     comment: "",
     category: new Category(""),
   });
-
-  const [errors, setErrors] = useState({ amount: '', name: '', currency: '' });
+  
+  const [errors, setErrors] = useState({ amount: '', name: '', currency: '', category: ''});
+  const isButtonDisabled = !(entryData.amount > 0 && entryData.currency && entryData.name && entryData.category && entryData.comment);
   const newEntry = new CreateEntryDTO(entryData.amount, entryData.date, entryData.currency, entryData.name, entryData.comment, entryData.category);
   const [date, setDate] = useState<any>(dayjs());
   const formatDate = (date: dayjs.Dayjs) => {
     return dayjs(date).format('DD/MM/YYYY');
   };
-
- 
+  
+  
   const handleSubmit = () => {
     dispatch(createEntry(newEntry))
     .then(() => {
       // Entry added successfully
       setEntryAdded(true);
-    });
+    })
     .catch(error => {
       // Handle error if entry addition fails
       console.error('Error adding expense:', error);
     });
-
+    
   };
-
+  
   const handleValidation = (fieldName: string) => {
-    const { amount, name, currency } = entryData;
-    const newErrors = { amount: '', name: '', currency: '' };
+    const { amount, name, currency, category } = entryData;
+    const newErrors = { amount: '', name: '', currency: '', category: ''};
   
     if (fieldName === 'amount') {
       if (amount <= 0) {
@@ -68,17 +69,16 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       if (currency.trim() === '') {
         newErrors.currency = 'Currency cannot be empty';
       }
+    } else if (fieldName === 'category') {
+      if (category.name.trim() === '') {
+        newErrors.category = 'Category cannot be empty';
+      }
     }
   
     setErrors(newErrors);
   };
-  
-
-   // console.log(route.params.entryId);
-   console.log(entryData, "entryData");
 
   
-
 
   return (
     <ScrollView>
@@ -118,6 +118,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       onChangeText={text => setEntryData({...entryData, category: new Category(text)})}
       value={entryData.category.name}
       placeholder="Category"
+      onBlur={() => handleValidation('category')}
     />
     <Text style={styles.label}>Date</Text>
      <Pressable
@@ -156,7 +157,7 @@ const EntryEditScreen = ({route, navigation}: Props) => {
     />
 <View style={styles.buttonContainer}>
       { /*<Button color='#FFFFFF' title="Add Expense" onPress={() => dispatch(createEntry(newEntry))} /> */}
-           { <Button color='#FFFFFF' title={entryAdded ? "Expense Added ✓" : "Add Expense"} onPress={handleSubmit} disabled={entryAdded} /> }
+           { <Button color='#FFFFFF' title={entryAdded ? "Expense Added ✓" : "Add Expense"} onPress={handleSubmit} disabled={isButtonDisabled || entryAdded} /> }
            </View>
     </View>
 
