@@ -4,41 +4,15 @@ import { FlatList, Text, View, StyleSheet, Button, TextInput } from 'react-nativ
 import { useSelector, useDispatch } from 'react-redux';
 import { createCategory, fetchCategories } from '../store/CategorySlice';
 import { AppDispatch, RootState } from '../store/store';
-import { CreateCategoryDTO } from '../entities/CreateCategoryDTO';
 
 const CategoryScreen = () => {
 
-  const [inputValue, setInputValue] = useState('');
-
   const dispatch: AppDispatch = useDispatch();
   const categories = useSelector((state: RootState) => state.category.categories);
-  const newCategory = new CreateCategoryDTO(inputValue);
 
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
-
-
-/*   const handleDeleteCategory = (categoryId) => {
-    dispatch(deleteCategory(categoryId));
-  }; */
-
-  const DATA = [
-    {
-      id: 'Takeout',
-      title: 'First Item',
-    },
-    {
-      id: 'Groceries',
-      title: 'Second Item',
-    },
-    {
-      id: 'Transportation',
-      title: 'Third Item',
-    },
-
-  
-  ];
 
 
   type CategoryProps = {name: string};
@@ -57,13 +31,6 @@ const Category = ({name}: CategoryProps) => (
         data={categories}
         renderItem={({item}) => <Category name={item.name} />}
       />
-  <TextInput
-        style={styles.input}
-        placeholder="Category"
-        value={inputValue}
-        onChangeText={text => setInputValue(text)}
-      />
-      <Button title="add category" onPress={() => dispatch(createCategory(newCategory)) }/>
     </View>
   )
 }

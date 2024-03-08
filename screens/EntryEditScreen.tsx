@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from '../store/store';
 import { Category } from '../entities/category';
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
+import { fetchCategories } from '../store/CategorySlice';
 
 type Props = NativeStackScreenProps<RootStackParamList, "EntryEdit">
 
@@ -38,9 +39,16 @@ const EntryEditScreen = ({route, navigation}: Props) => {
 
  
   const handleSubmit = () => {
-    const newEntry = new CreateEntryDTO(entryData.amount, entryData.date, entryData.currency, entryData.name, entryData.comment, entryData.category);
-    // Dispatch an action or make an API call with newEntry here
+    dispatch(createEntry(newEntry))
+      .then(() => {
+        // Dispatch fetchCategories() after a new entry is created
+        dispatch(fetchCategories());
+      })
+      .catch(error => {
+        console.error('Error adding entry:', error);
+      });
   };
+
   useEffect(() => {
     dispatch(fetchEntries());
   }, [dispatch]);
