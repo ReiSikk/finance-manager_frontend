@@ -11,6 +11,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { store } from './store/store'
 import { Provider } from 'react-redux'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { NativeBaseProvider } from "native-base";
 
 
 //map the route names to the params of the route meaning define a type for the params of each route
@@ -34,11 +36,15 @@ const EntryStackNavigator = () => {
 }
 
 const Tab = createBottomTabNavigator();
+// Create a client
+const queryClient = new QueryClient()
 
 export default function App() {
   return (
     <Provider store={store}>
-    <NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+      <NativeBaseProvider>
+        <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen 
         name="Home" 
@@ -59,7 +65,9 @@ export default function App() {
             headerShown: true
           }} />
       </Tab.Navigator>
-    </NavigationContainer>
+        </NavigationContainer>
+        </NativeBaseProvider>
+        </QueryClientProvider>
     </Provider>
   );
 }

@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { Entry } from '../entities/entry'
-import { EntriesAPI } from '../api/entriesAPI'
 import { CreateCategoryDTO } from '../entities/CreateCategoryDTO'
 import { CreateEntryDTO } from '../entities/CreateEntryDTO'
+import { EntryQueries } from '../api/EntryQueries'
 
 export interface EntryState {
   entries: Entry[]
@@ -18,7 +18,7 @@ const initialState: EntryState = {
 export const fetchEntries = createAsyncThunk(
     'fetchEntries',
     async (thunkAPI) => {
-      return await EntriesAPI.fetchAll();
+      return await EntryQueries.fetchAll();
     },
   )
 
@@ -26,7 +26,7 @@ export const fetchEntries = createAsyncThunk(
   export const createEntry = createAsyncThunk(
     'createEntry',
     async (entry: CreateEntryDTO, thunkAPI) => {
-      return await EntriesAPI.createEntry(entry)
+      return await EntryQueries.createEntry(entry)
     },
   )
 

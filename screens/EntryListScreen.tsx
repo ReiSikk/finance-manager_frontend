@@ -8,7 +8,6 @@ import { AppDispatch, RootState } from '../store/store';
 import { fetchEntries } from '../store/EntrySlice';
 import { useEffect } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Category } from '../entities/category';
 
 
