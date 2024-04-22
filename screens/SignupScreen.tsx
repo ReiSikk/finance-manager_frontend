@@ -2,11 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, AppState, Text } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Box, Button, FormControl, Input, Stack, WarningOutlineIcon } from 'native-base';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/store';
+import { signup } from '../store/UserSlice';
 
 function SignupScreen() {
 
+    const dispatch = useDispatch<AppDispatch>();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const handleSignUp = () => {
+        console.log("Signing up...");
+        dispatch(signup({username, password}))
+        .then(() => {
+            setIsLoggedIn(true);
+        })
+
+    }
+
   return (
     <View>
      
@@ -39,7 +55,7 @@ function SignupScreen() {
     
 
     <Box alignItems="center">
-        <Button /*onPress={handleLogin}*/>Sign-up</Button>
+        <Button onPress={handleSignUp}>Sign-up</Button>
     </Box>
 </View>
 

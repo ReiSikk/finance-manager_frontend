@@ -15,6 +15,7 @@ import { store } from './store/store'
 import { Provider } from 'react-redux'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { NativeBaseProvider } from "native-base";
+import MainNavigation from './screens/MainNavigation';
 
 
 //map the route names to the params of the route meaning define a type for the params of each route
@@ -32,8 +33,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const EntryStackNavigator = () => {
 
   return (
-    <Stack.Navigator initialRouteName='SignupScreen'>
-        <Stack.Screen name="SignupScreen" component={SignupScreen} />
+    <Stack.Navigator initialRouteName='LoginScreen'>
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="EntryList" component={EntryListScreen} />
         <Stack.Screen name="EntryEdit" component={EntryEditScreen} />
         <Stack.Screen name="EntryDelete" component={EntryDeleteScreen} />
@@ -51,37 +52,8 @@ export default function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
       <NativeBaseProvider>
-        <NavigationContainer>
-          {isSignedIn ? (
-        <Tab.Navigator>
-         <Tab.Screen 
-        name="Home" 
-        component={EntryStackNavigator} 
-        options={{
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="home" size={24} color="blue" />
-          ),
-            headerShown: false
-          }} />
-        <Tab.Screen 
-        name="Categories" 
-        component={CategoryScreen} 
-        options={{
-          tabBarIcon: ({ color }) => (
-      <MaterialIcons name="category" size={24} color="blue" />
-          ),
-            headerShown: true
-          }} />
-      </Tab.Navigator>) : (
-          <>
-            <Stack.Navigator>
-                <Stack.Screen name="SignupScreen" component={SignupScreen} />
-                <Stack.Screen name="LoginScreen" component={LoginScreen} />
-            </Stack.Navigator>
-          </>
-      )}
-     
-        </NavigationContainer>
+        <MainNavigation>
+        </MainNavigation>
         </NativeBaseProvider>
         </QueryClientProvider>
     </Provider>
