@@ -5,7 +5,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EntryListScreen from './screens/EntryListScreen';
 import EntryEditScreen from './screens/EntryEditScreen';
 import EntryDeleteScreen from './screens/EntryDeleteScreen';
+import LoginScreen from './screens/LoginScreen';
 import CategoryScreen from './screens/CategoryScreen';
+import SignupScreen from './screens/SignupScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -18,6 +20,8 @@ import { NativeBaseProvider } from "native-base";
 //map the route names to the params of the route meaning define a type for the params of each route
 export type RootStackParamList = {
   // specifying undefined means that the route doesn't have params
+  SignupScreen: undefined;
+  LoginScreen: undefined;
   EntryList: undefined;
   EntryEdit: { entryId: number };
   EntryDelete: { entryId: number };
@@ -26,8 +30,10 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const EntryStackNavigator = () => {
+
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName='SignupScreen'>
+        <Stack.Screen name="SignupScreen" component={SignupScreen} />
         <Stack.Screen name="EntryList" component={EntryListScreen} />
         <Stack.Screen name="EntryEdit" component={EntryEditScreen} />
         <Stack.Screen name="EntryDelete" component={EntryDeleteScreen} />
@@ -40,13 +46,15 @@ const Tab = createBottomTabNavigator();
 const queryClient = new QueryClient()
 
 export default function App() {
+  const isSignedIn = false;
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
       <NativeBaseProvider>
         <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen 
+          {isSignedIn ? (
+        <Tab.Navigator>
+         <Tab.Screen 
         name="Home" 
         component={EntryStackNavigator} 
         options={{
@@ -55,7 +63,7 @@ export default function App() {
           ),
             headerShown: false
           }} />
-         <Tab.Screen 
+        <Tab.Screen 
         name="Categories" 
         component={CategoryScreen} 
         options={{
@@ -64,7 +72,15 @@ export default function App() {
           ),
             headerShown: true
           }} />
-      </Tab.Navigator>
+      </Tab.Navigator>) : (
+          <>
+            <Stack.Navigator>
+                <Stack.Screen name="SignupScreen" component={SignupScreen} />
+                <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            </Stack.Navigator>
+          </>
+      )}
+     
         </NavigationContainer>
         </NativeBaseProvider>
         </QueryClientProvider>
