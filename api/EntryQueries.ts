@@ -5,9 +5,9 @@ export class EntryQueries extends SuperQueries {
     static baseUrl = super.baseUrl + 'entry'
 
     static async fetchAll() {
-        console.log("EntryQueries fetched all entries")
         const response = await fetch(this.baseUrl);
         const data = await response.json();
+        console.log("EntryQueries fetched all entries", data);
         return data;
     }
 
