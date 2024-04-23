@@ -7,12 +7,10 @@ export class EntryQueries extends SuperQueries {
     static async fetchAll() {
         const response = await fetch(this.baseUrl);
         const data = await response.json();
-        console.log("EntryQueries fetched all entries", data);
         return data;
     }
 
     static async createEntry(entry: CreateEntryDTO) {
-        console.log("saving this entry", entry);
         
         const response = await fetch(this.baseUrl, {
             method: 'POST',

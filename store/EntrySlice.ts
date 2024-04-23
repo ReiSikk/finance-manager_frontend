@@ -38,7 +38,6 @@ export const entrySlice = createSlice({
   reducers: {
   // i need to push the new category to the state
        addEntry: (state, action: PayloadAction<Entry>) => {
-        console.log("action.payload", action.payload);
         state.entries.push(action.payload)
         }
   },
@@ -46,14 +45,12 @@ export const entrySlice = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchEntries.fulfilled, (state, action) => {
       // Add user to the state array
-      console.log("action.payload", action.payload);
       
       state.entries = action.payload;
     //   state.entities.push(action.payload)
     }),
     builder.addCase(createEntry.fulfilled, (state, action) => {
         // Add user to the state array
-        console.log("action.payload", action.payload);
         
         state.entries.push(action.payload)
       //   state.entities.push(action.payload)

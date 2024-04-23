@@ -64,11 +64,12 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action: PayloadAction<string>) => {
+            console.log("action.payload in setToken", action.payload);
             state.token = action.payload;
         },
         logout: (state) => {
             state.token = '';
-            console.log("test");
+            console.log("state.token in logout", state.token);
             SecureStore.deleteItemAsync('token')
         },
     },
@@ -83,6 +84,7 @@ export const userSlice = createSlice({
                 // state.user = action.payload.user;
                 state.token = action.payload.access_token;
                 SecureStore.setItemAsync('token', action.payload.access_token);
+                console.log("state.token in login.fulfilled", state.token);
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
