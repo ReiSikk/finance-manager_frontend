@@ -21,7 +21,7 @@ function LoginScreen() {
          try {
             if(response.meta.requestStatus === 'fulfilled') {
                 await SecureStore.setItemAsync('token', JSON.stringify(response));
-                const storedResponse = await SecureStore.getItemAsync('token');
+                const storedResponse = await SecureStore.getItemAsync('token', response.payload.access_token);
                 if (storedResponse) {
                     console.log("Response was stored correctly", response.payload.access_token);
                 } else {

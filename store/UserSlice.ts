@@ -50,7 +50,6 @@ export const signup = createAsyncThunk(
     async (userData: { username: string; password: string }, thunkAPI) => {
         // try {
             const response = UserQueries.signup(userData.username, userData.password)
-            // console.log("userSlice", response);
             return response;
             
             

@@ -22,8 +22,8 @@ export type RootStackParamList = {
     EntryList: undefined;
     EntryEdit: { entryId: number };
     EntryDelete: { entryId: number };
-    AuthSignup: undefined;
-    AuthLogin: undefined;
+    SignupScreen: undefined;
+    LoginScreen: undefined;
   };
   
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -65,8 +65,8 @@ const MainNavigation = () => {
             <>
             {/* <TodoScreen /> */}
               <Stack.Navigator>
-                  <Stack.Screen name="AuthLogin" component={LoginScreen} />
-                  <Stack.Screen name="AuthSignup" component={SignupScreen} />
+                  <Stack.Screen name="SignupScreen" component={SignupScreen} />
+                  <Stack.Screen name="LoginScreen" component={LoginScreen} />
               </Stack.Navigator>
             </>
           )

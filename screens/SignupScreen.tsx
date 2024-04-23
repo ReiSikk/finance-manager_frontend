@@ -5,8 +5,13 @@ import { Box, Button, FormControl, Input, Stack, WarningOutlineIcon } from 'nati
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { signup } from '../store/UserSlice';
+import { RootStackParamList } from '../App';
 
-function SignupScreen() {
+
+type Props = NativeStackScreenProps<RootStackParamList, "SignupScreen">
+
+
+function SignupScreen(props: Props) {
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -15,7 +20,6 @@ function SignupScreen() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleSignUp = () => {
-        console.log("Signing up...");
         dispatch(signup({username, password}))
         .then(() => {
             setIsLoggedIn(true);
@@ -57,6 +61,7 @@ function SignupScreen() {
     <Box alignItems="center">
         <Button onPress={handleSignUp}>Sign-up</Button>
     </Box>
+    <Text style={{textAlign: 'center'}} onPress={() => props.navigation.navigate("LoginScreen")}>Already have an account? Login</Text>
 </View>
 
   )
