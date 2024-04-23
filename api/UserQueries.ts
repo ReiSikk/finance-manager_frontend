@@ -14,7 +14,7 @@ console.log("calling...", this.baseUrl + "login");
             body: JSON.stringify({ username, password })
          });
          const data = await response.json();
-        console.log(data);
+        console.log(data, "data from login response");
         
         return data;
     }
