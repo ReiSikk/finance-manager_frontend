@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { UserQueries } from '../api/UserQueries';
 import * as SecureStore from 'expo-secure-store';
+import { CreateUserDTO } from '../entities/CreateUserDTO';
 
 interface UserState {
     user: User | null;
@@ -47,9 +48,9 @@ export const login = createAsyncThunk(
 
 export const signup = createAsyncThunk(
     'auth/signup',
-    async (userData: { username: string; password: string }, thunkAPI) => {
+    async (user: CreateUserDTO, thunkAPI) => {
         // try {
-            const response = UserQueries.signup(userData.username, userData.password)
+            const response = UserQueries.signup(user)
             return response;
             
             

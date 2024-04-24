@@ -1,3 +1,4 @@
+import { CreateUserDTO } from '../entities/CreateUserDTO';
 import { SuperQueries } from './SuperQueries';
 
 export class UserQueries extends SuperQueries {
@@ -18,13 +19,13 @@ console.log("calling...", this.baseUrl + "login");
         
         return data;
     }
-    static async signup(username: string, password: string) {
+    static async signup(user: CreateUserDTO) {
         const response = await fetch(this.baseUrl + "signup", { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify(user)
          });
          const data = response.json();
 
