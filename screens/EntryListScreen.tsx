@@ -1,30 +1,37 @@
 import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View, Text, Button, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
 import { RootStackParamList } from '../App';
 import { AntDesign } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
-import { fetchEntries } from '../store/EntrySlice';
+import { deleteEntry, fetchEntries } from '../store/EntrySlice';
 import { useEffect } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Category } from '../entities/category';
+import { Button } from 'native-base';
+
 
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "EntryList">
 
-type ItemProps = {name: string, amount: number, currency: string, comment: string, description: string, /* category: Category */};
-const Item = ({name, amount, currency, comment, description, /* category */}: ItemProps) => (
+type ItemProps = {id:number,name: string, amount: number, currency: string, comment: string, description: string, /* category: Category */ onPress: () => void};
+const Item = ({id, name, amount, currency, comment, description, /* category */ onPress}: ItemProps) => (
+
   <View style={styles.item}>
     <Text style={styles.title}>{name}</Text>
     <Text style={styles.white}>{amount}</Text>
     <Text style={styles.white}>{currency}</Text>
     <Text style={styles.white}>{comment}</Text>
     <Text style={styles.white}>{description}</Text>
+    <Text style={styles.white}>{id}</Text>
+    <Button onPress={onPress}>Delete entry</Button>
    {/*  {category !== null ? <Text>{category.name}</Text> : <Text>Category not set</Text>} */}
   </View>
 );
+
+
 
 
 const EntryListScreen = (props: Props) => {
@@ -34,6 +41,13 @@ const EntryListScreen = (props: Props) => {
   useEffect(() => {
     dispatch(fetchEntries());
   }, [dispatch]);
+
+  const handleOnPress = (id:number) => {
+    console.log("EntryListScreen: handleOnPress", id);
+    dispatch(deleteEntry(id)).then(() => {
+      dispatch(fetchEntries());
+    });
+  }
 
   return (
     <>
@@ -47,7 +61,7 @@ const EntryListScreen = (props: Props) => {
     <View>
         <FlatList
         data={entries}
-        renderItem={({item}) => <Item name={item.name} amount={item.amount} currency={item.currency} comment={item.comment} description={item.description} /* category={item.category} */ />}
+        renderItem={({item}) => <Item id={item.id} name={item.name} amount={item.amount} currency={item.currency} comment={item.comment} description={item.description} onPress={() => handleOnPress(item.id)} />}
         keyExtractor={item => item.id.toString()}
       />
     </View>

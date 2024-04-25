@@ -31,6 +31,14 @@ export const fetchEntries = createAsyncThunk(
   )
 
 
+  export const deleteEntry = createAsyncThunk(
+    'deleteEntry',
+    async (id: number, thunkAPI) => {
+      return await EntryQueries.deleteEntry(id)
+    },
+  )
+
+
 
 export const entrySlice = createSlice({
   name: 'entry',
@@ -46,7 +54,7 @@ export const entrySlice = createSlice({
     builder.addCase(fetchEntries.fulfilled, (state, action) => {
       // Add user to the state array
       
-      state.entries = Array.isArray(action.payload) ? action.payload : [];
+      state.entries = action.payload;
     //   state.entities.push(action.payload)
     }),
     builder.addCase(createEntry.fulfilled, (state, action) => {
@@ -54,7 +62,11 @@ export const entrySlice = createSlice({
         
         state.entries.push(action.payload)
       //   state.entities.push(action.payload)
-      })
+      }),
+
+      builder.addCase(deleteEntry.fulfilled, (state, action) => {
+        state.entries = state.entries.filter(entry => entry.id !== action.payload.id);
+      });
 }
 })
 
