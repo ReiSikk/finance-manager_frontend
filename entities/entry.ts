@@ -7,6 +7,7 @@ export class Entry {
     name: string;
     comment: string;
     description: string;
+    photo: string;
     category: Category; // Category type
   
     constructor(
@@ -17,6 +18,7 @@ export class Entry {
       name: string,
       comment: string,
       description: string,
+      photo: string,
       category: Category
     ) {
       this.id = id;
@@ -26,6 +28,7 @@ export class Entry {
       this.name = name;
       this.comment = comment;
       this.description = description;
+      this.photo = photo;
       this.category = category;
     }
   }
