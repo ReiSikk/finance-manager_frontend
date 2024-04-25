@@ -36,7 +36,7 @@ export const entrySlice = createSlice({
   name: 'entry',
   initialState,
   reducers: {
-  // i need to push the new category to the state
+  //push new category to the state
        addEntry: (state, action: PayloadAction<Entry>) => {
         state.entries.push(action.payload)
         }
@@ -46,7 +46,7 @@ export const entrySlice = createSlice({
     builder.addCase(fetchEntries.fulfilled, (state, action) => {
       // Add user to the state array
       
-      state.entries = action.payload;
+      state.entries = Array.isArray(action.payload) ? action.payload : [];
     //   state.entities.push(action.payload)
     }),
     builder.addCase(createEntry.fulfilled, (state, action) => {
