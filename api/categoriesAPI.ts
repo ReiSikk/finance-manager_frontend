@@ -1,7 +1,7 @@
 import { CreateCategoryDTO } from "../entities/CreateCategoryDTO";
 
 export class CategoriesAPI {
-    static baseUrl = 'http://localhost:3000/categories'
+    static baseUrl = 'http://172.17.233.3/categories'
 
     static async fetchAll() {
         const response = await fetch(this.baseUrl);

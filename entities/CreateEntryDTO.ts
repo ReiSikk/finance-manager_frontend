@@ -1,4 +1,6 @@
+import { PermissionHookOptions } from 'expo-camera';
 import { Category } from './category';
+import { User } from './user';
 
 export class CreateEntryDTO {
     amount: number;
@@ -6,14 +8,16 @@ export class CreateEntryDTO {
     currency: string;
     name: string;
     comment: string;
+    photo: string;
     category: Category;
 
-    constructor(amount: number, date: Date, currency: string, name: string, comment: string, category: Category) {
+    constructor(amount: number, date: Date, currency: string, name: string, comment: string, photo: string, category: Category) {
         this.amount = amount;
         this.date = date;
         this.currency = currency;
         this.name = name;
         this.comment = comment;
+        this.photo = photo;
         this.category = category;
 
     }

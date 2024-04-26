@@ -2,12 +2,15 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { UserQueries } from '../api/UserQueries';
 import * as SecureStore from 'expo-secure-store';
+import { CreateUserDTO } from '../entities/CreateUserDTO';
+import { Entry } from '../entities/entry';
 
 interface UserState {
     user: User | null;
     token: string | null;
     loading: boolean;
     error: string | null;
+    entries: Entry[]
 }
 
 interface User {
@@ -27,6 +30,7 @@ const initialState: UserState = {
     token: null,
     loading: false,
     error: null,
+    entries: []
 };
 
 export const login = createAsyncThunk(
@@ -47,9 +51,9 @@ export const login = createAsyncThunk(
 
 export const signup = createAsyncThunk(
     'auth/signup',
-    async (userData: { username: string; password: string }, thunkAPI) => {
+    async (user: CreateUserDTO, thunkAPI) => {
         // try {
-            const response = UserQueries.signup(userData.username, userData.password)
+            const response = UserQueries.signup(user)
             return response;
             
             
@@ -64,11 +68,11 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action: PayloadAction<string>) => {
+            console.log("action.payload in setToken", action.payload);
             state.token = action.payload;
         },
         logout: (state) => {
             state.token = '';
-            console.log("test");
             SecureStore.deleteItemAsync('token')
         },
     },
@@ -95,6 +99,10 @@ export const userSlice = createSlice({
             .addCase(signup.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
+               /*  state.user = {
+                    ...action.payload,
+                    entries: [],
+                }; */
                 // state.token = action.payload.token;
             })
             .addCase(signup.rejected, (state, action) => {

@@ -5,7 +5,7 @@ import { Box, Button, FormControl, Input, Stack, WarningOutlineIcon } from 'nati
 import { useDispatch, useSelector } from 'react-redux';
 import * as SecureStore from'expo-secure-store';
 import { AppDispatch } from '../store/store';
-import { login } from '../store/UserSlice';
+import { login, setToken } from '../store/UserSlice';
 
 function LoginScreen() {
 
@@ -15,26 +15,18 @@ function LoginScreen() {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleLogin = async () => {
-        console.log("Logging in...");
        const response = await dispatch(login({username, password}))
-         console.log(response, "response in handle login" );
-         try {
-            if(response.meta.requestStatus === 'fulfilled') {
-                await SecureStore.setItemAsync('token', JSON.stringify(response));
-                const storedResponse = await SecureStore.getItemAsync('token', response.payload.access_token);
-                if (storedResponse) {
-                    console.log("Response was stored correctly", response.payload.access_token);
-                } else {
-                    console.log("Failed to store the response");
-                }
-            } else {
-                console.log("error logging in");
-            }
-         } catch (error) {
-             console.log("error logging in", error);
-         }
-
     }
+
+
+    useEffect(() => {
+        async function readFromSecureStore() {
+            const token = await SecureStore.getItemAsync('token');
+            token && dispatch(setToken(token))
+        }
+    }, [])
+
+    
   return (
     <View>
      
