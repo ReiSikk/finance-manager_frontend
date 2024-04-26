@@ -26,9 +26,11 @@ export const fetchEntries = createAsyncThunk(
   export const createEntry = createAsyncThunk(
     'createEntry',
     async (entry: CreateEntryDTO, thunkAPI) => {
+      console.log("createEntry in EntrySlice called with:", entry);
       return await EntryQueries.createEntry(entry)
     },
   )
+  
 
 
   export const deleteEntry = createAsyncThunk(
@@ -59,6 +61,7 @@ export const entrySlice = createSlice({
     }),
     builder.addCase(createEntry.fulfilled, (state, action) => {
         // Add user to the state array
+        console.log("createEntry.fulfilled in EntrySlice called with:", action.payload);
         
         state.entries.push(action.payload)
       //   state.entities.push(action.payload)

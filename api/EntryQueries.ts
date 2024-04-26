@@ -3,6 +3,7 @@ import { SuperQueries } from './SuperQueries';
 import * as SecureStore from 'expo-secure-store';
 import { User } from '../entities/user';
 
+
 export class EntryQueries extends SuperQueries {
     static baseUrl = SuperQueries.baseUrl + 'entry'
 
@@ -22,6 +23,7 @@ export class EntryQueries extends SuperQueries {
     }
     
     static async createEntry(entry: CreateEntryDTO) {
+        const token = await SecureStore.getItemAsync('token')
         
         const token = await SecureStore.getItemAsync('token')
         console.log(token, "token in createEntry EntryQueries");
@@ -29,7 +31,9 @@ export class EntryQueries extends SuperQueries {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                 'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
+
+
             },
             body: JSON.stringify(entry)
         });
