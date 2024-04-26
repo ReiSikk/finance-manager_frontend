@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { Category } from '../entities/category'
-import { CategoriesAPI } from '../api/categoriesAPI'
+import { CategoryQueries } from '../api/CategoryQueries'
 import { CreateCategoryDTO } from '../entities/CreateCategoryDTO'
 
 export interface CategoryState {
@@ -17,7 +17,7 @@ const initialState: CategoryState = {
 export const fetchCategories = createAsyncThunk(
     'fetchCategories',
     async (thunkAPI) => {
-      return await CategoriesAPI.fetchAll();
+      return await CategoryQueries.fetchAll();
     },
   )
 
@@ -25,7 +25,7 @@ export const fetchCategories = createAsyncThunk(
   export const createCategory = createAsyncThunk(
     'createCategory',
     async (category: CreateCategoryDTO, thunkAPI) => {
-      return await CategoriesAPI.createCategory(category)
+      return await CategoryQueries.createCategory(category)
     },
   )
 

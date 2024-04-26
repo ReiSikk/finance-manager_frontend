@@ -1,7 +1,9 @@
 import { CreateCategoryDTO } from "../entities/CreateCategoryDTO";
+import { SuperQueries } from "./SuperQueries";
 
-export class CategoriesAPI {
-    static baseUrl = 'http://172.17.233.3/categories'
+export class CategoryQueries extends SuperQueries {
+    static baseUrl = SuperQueries.baseUrl + 'categories'
+
 
     static async fetchAll() {
         const response = await fetch(this.baseUrl);
