@@ -1,5 +1,6 @@
 import { PermissionHookOptions } from 'expo-camera';
 import { Category } from './category';
+import { User } from './user';
 
 export class CreateEntryDTO {
     amount: number;

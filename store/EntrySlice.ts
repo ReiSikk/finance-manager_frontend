@@ -33,12 +33,20 @@ export const fetchEntries = createAsyncThunk(
   
 
 
+  export const deleteEntry = createAsyncThunk(
+    'deleteEntry',
+    async (id: number, thunkAPI) => {
+      return await EntryQueries.deleteEntry(id)
+    },
+  )
+
+
 
 export const entrySlice = createSlice({
   name: 'entry',
   initialState,
   reducers: {
-  // i need to push the new category to the state
+  //push new category to the state
        addEntry: (state, action: PayloadAction<Entry>) => {
         state.entries.push(action.payload)
         }
@@ -57,7 +65,11 @@ export const entrySlice = createSlice({
         
         state.entries.push(action.payload)
       //   state.entities.push(action.payload)
-      })
+      }),
+
+      builder.addCase(deleteEntry.fulfilled, (state, action) => {
+        state.entries = state.entries.filter(entry => entry.id !== action.payload.id);
+      });
 }
 })
 

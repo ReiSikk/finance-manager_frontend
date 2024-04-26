@@ -3,12 +3,14 @@ import { RootState } from './store';
 import { UserQueries } from '../api/UserQueries';
 import * as SecureStore from 'expo-secure-store';
 import { CreateUserDTO } from '../entities/CreateUserDTO';
+import { Entry } from '../entities/entry';
 
 interface UserState {
     user: User | null;
     token: string | null;
     loading: boolean;
     error: string | null;
+    entries: Entry[]
 }
 
 interface User {
@@ -28,6 +30,7 @@ const initialState: UserState = {
     token: null,
     loading: false,
     error: null,
+    entries: []
 };
 
 export const login = createAsyncThunk(
@@ -70,7 +73,6 @@ export const userSlice = createSlice({
         },
         logout: (state) => {
             state.token = '';
-            console.log("state.token in logout", state.token);
             SecureStore.deleteItemAsync('token')
         },
     },
@@ -85,7 +87,6 @@ export const userSlice = createSlice({
                 // state.user = action.payload.user;
                 state.token = action.payload.access_token;
                 SecureStore.setItemAsync('token', action.payload.access_token);
-                console.log("state.token in login.fulfilled", state.token);
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -98,6 +99,10 @@ export const userSlice = createSlice({
             .addCase(signup.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
+               /*  state.user = {
+                    ...action.payload,
+                    entries: [],
+                }; */
                 // state.token = action.payload.token;
             })
             .addCase(signup.rejected, (state, action) => {
