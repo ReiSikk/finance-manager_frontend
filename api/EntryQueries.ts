@@ -1,7 +1,6 @@
 import { CreateEntryDTO } from '../entities/CreateEntryDTO';
 import { SuperQueries } from './SuperQueries';
 import * as SecureStore from 'expo-secure-store';
-import { User } from '../entities/user';
 
 
 export class EntryQueries extends SuperQueries {
@@ -23,8 +22,6 @@ export class EntryQueries extends SuperQueries {
     }
     
     static async createEntry(entry: CreateEntryDTO) {
-        const token = await SecureStore.getItemAsync('token')
-        
         const token = await SecureStore.getItemAsync('token')
         console.log(token, "token in createEntry EntryQueries");
         const response = await fetch(this.baseUrl, {

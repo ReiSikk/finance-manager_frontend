@@ -9,24 +9,30 @@ import { deleteEntry, fetchEntries } from '../store/EntrySlice';
 import { useEffect } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Category } from '../entities/category';
-import { Button } from 'native-base';
+import { Button, Container, AspectRatio, Image } from 'native-base';
 
 
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "EntryList">
 
-type ItemProps = {id:number,name: string, amount: number, currency: string, comment: string, description: string, /* category: Category */ onPress: () => void};
-const Item = ({id, name, amount, currency, comment, description, /* category */ onPress}: ItemProps) => (
+type ItemProps = {id:number,name: string, amount: number, currency: string, comment: string, description: string, category: Category, photo:string, onPress: () => void};
+const Item = ({id, name, amount, currency, comment, description, category, photo, onPress}: ItemProps) => (
 
   <View style={styles.item}>
     <Text style={styles.title}>{name}</Text>
-    <Text style={styles.white}>{amount}</Text>
-    <Text style={styles.white}>{currency}</Text>
-    <Text style={styles.white}>{comment}</Text>
-    <Text style={styles.white}>{description}</Text>
-    <Text style={styles.white}>{id}</Text>
-    <Button onPress={onPress}>Delete entry</Button>
+    <Text style={styles.white}>Money spent: {amount} {currency}</Text>
+    <Text style={styles.white}>Comment: {comment}</Text>
+    <Text style={styles.white}>Description: {description}</Text>
+    <Text style={styles.whiteHeading}>Category:</Text>
+    <Text style={styles.white}>{category !== null ? category.name : "Category not set"}</Text>
+    <AspectRatio w="100%" marginTop={5} marginBottom={-5} ratio={16 / 9}>
+            <Image source={{
+              uri: `${photo}`
+            }} alt="image" />
+    </AspectRatio>
+          <Text style={styles.white}>Receipt of purchase</Text>
+    <Button onPress={onPress} width="100%" marginTop={10}>Delete entry</Button>
    {/*  {category !== null ? <Text>{category.name}</Text> : <Text>Category not set</Text>} */}
   </View>
 );
@@ -43,11 +49,11 @@ const EntryListScreen = (props: Props) => {
   }, [dispatch]);
 
   const handleOnPress = (id:number) => {
-    console.log("EntryListScreen: handleOnPress", id);
     dispatch(deleteEntry(id)).then(() => {
       dispatch(fetchEntries());
     });
   }
+
 
   return (
     <>
@@ -61,7 +67,7 @@ const EntryListScreen = (props: Props) => {
     <View>
         <FlatList
         data={entries}
-        renderItem={({item}) => <Item id={item.id} name={item.name} amount={item.amount} currency={item.currency} comment={item.comment} description={item.description} onPress={() => handleOnPress(item.id)} />}
+        renderItem={({item}) => <Item id={item.id} name={item.name} amount={item.amount} currency={item.currency} comment={item.comment} description={item.description} category={item.category} photo={item.photo} onPress={() => handleOnPress(item.id)}/>}
         keyExtractor={item => item.id.toString()}
       />
     </View>
@@ -116,6 +122,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginLeft: 10,
   },
+
   item: {
     backgroundColor: '#474350',
     borderRadius: 8,
@@ -130,5 +137,11 @@ const styles = StyleSheet.create({
   },
   white: {
     color: 'white',
+  },
+  whiteHeading: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginTop: 10,
   }
 });
