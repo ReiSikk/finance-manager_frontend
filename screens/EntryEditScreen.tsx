@@ -11,7 +11,8 @@ import { Category } from '../entities/category';
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 import { fetchCategories } from '../store/CategorySlice';
-import { Picture } from '../components/Picture'
+import Picture from '../components/Picture'
+import { Image } from 'react-native';
 
 type Props = NativeStackScreenProps<RootStackParamList, "EntryEdit">
 
@@ -160,13 +161,21 @@ const EntryEditScreen = ({route, navigation}: Props) => {
       placeholder="Comment"
     />
 
- {/* {camera ? <Picture setCamera={setCamera} setPhotoToDisplay={setPhotoToDisplay}></Picture> : <> */}
+ {camera ? 
+ <Picture 
+ setCamera={setCamera}
+  setPhotoToDisplay={setPhotoToDisplay}
+  photoToDto={(photo: string) => setEntryData({...entryData, photo})}
+  ></Picture> : <>
+ 
           
 
 
+ <Image source={{uri: entries[0]?.photo}} style={{width: 400, height: 400}} />
+     <Button title="Open camera" onPress={() => setCamera(true)}/>
+       </> }
 
-          {/*   <Button title="Open camera" onPress={() => setCamera(true)}/> */}
-       {/* </> } */}
+       
 
 <View style={styles.buttonContainer}>
       { /*<Button color='#FFFFFF' title="Add Expense" onPress={() => dispatch(createEntry(newEntry))} /> */}

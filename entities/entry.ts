@@ -18,8 +18,8 @@ export class Entry {
       name: string,
       comment: string,
       description: string,
-      photo: string,
-      category: Category
+      category: Category,
+      photo: any
     ) {
       this.id = id;
       this.amount = amount;
@@ -28,7 +28,7 @@ export class Entry {
       this.name = name;
       this.comment = comment;
       this.description = description;
-      this.photo = photo;
       this.category = category;
+      this.photo = photo;
     }
   }
